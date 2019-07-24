@@ -3,13 +3,10 @@
 The official YAP SDK for JavaScript, available for browsers and or Node.js backends
 
 ## Installing
-
-### With yarm
 ```
     yarn add yap-sdk
 ```
 
-### With npm
 ```
     npm install yap-sdk
 ```
