@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "YAP SDK for JavaScript",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "prepublish": "yarn build",
   "repository": "git@github.com:youngapp/yap-sdk.git",
   "author": "Gérard TOKO <gerard@youngapp.co>",
   "license": "MIT",
