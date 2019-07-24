@@ -7,6 +7,11 @@
   "author": "Gérard TOKO <gerard@youngapp.co>",
   "license": "MIT",
   "private": true,
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "scripts": {
     "unbuild": "rm -rf dist",
     "build": "yarn unbuild && ENV=dev tsc --declaration",
@@ -18,7 +23,6 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@types/jest": "^24.0.15",
-    "@types/nock": "^10.0.3",
     "husky": "^3.0.1",
     "jest": "^24.8.0",
     "jest-html-reporter": "^2.5.0",
@@ -28,8 +32,6 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@types/sinon": "^7.0.13",
-    "sinon": "^7.3.2",
     "whatwg-fetch": "^3.0.0"
   }
 }

@@ -20,154 +20,119 @@ export default class APIGateway {
     this.apiUrl = apiUrl;
   }
 
-  // /**
-  //  * Convert method to promise
-  //  * @param promise function
-  //  */
-  // private promisify(func: Promise<any>): Promise<any> {
-  //   return new Promise<any>((resolve, reject) => {
-  //     console.info(func);
-  //     func.then(async (response) => {
-  //       console.info(response);
-  //       if (
-  //         response.status === 422 ||
-  //         response.status === 403 ||
-  //         response.status === 404 ||
-  //         response.status === 500
-  //       ) {
-  //         return reject(await response.json());
-  //       }
-  //       return response.json();
-  //     })
-  //       .then((result) => {
-  //         if (result.errors) {
-  //           reject(result.errors);
-  //         } else if (result && result.data) {
-  //           resolve(result.data);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         return reject(err);
-  //       });
-  //   });
-  // }
-
   /**
-   * create method
-   * @param body
+   * Convert method to promise
+   * @param promise function
    */
-  public create(model: string, type: string, body: any): Promise<any> {
-    console.info(model);
-    console.info(type);
-    console.info(body);
-    console.info(this.apiUrl);
-    return new Promise((resolve, reject) => {
-      window.fetch(this.apiUrl, {
-        headers: {
-          authorization: `Bearer ${this.apiKey}`,
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          type,
-          model,
-          values: body,
-        }),
-      }).then(async (response) => {
-        console.info(response);
-        if (
-          response.status === 422 ||
-          response.status === 403 ||
-          response.status === 404 ||
-          response.status === 500
-        ) {
+  private promisify(func: Promise<any>): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      func.then(async (response) => {
+        if (response.status >= 400) {
           return reject(await response.json());
         }
         return response.json();
+      }).then((result) => {
+        if (result.errors) {
+          reject(result.errors);
+        }
+        resolve(result.data);
       })
-        .then((result) => {
-          if (result.errors) {
-            reject(result.errors);
-          } else if (result && result.data) {
-            resolve(result.data);
-          }
-        })
         .catch((err) => {
           return reject(err);
         });
     });
   }
 
-  // /**
-  //  * create method
-  //  * @param body
-  //  */
-  // public update(model: string, type: string, query: any, body: any): Promise<any> {
-  //   return this.promisify(
-  //     window.fetch(this.apiUrl, {
-  //       headers: {
-  //         authorization: `Bearer ${this.apiKey}`,
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         model,
-  //         query,
-  //         values: body,
-  //       }),
-  //     }));
-  // }
+  /**
+   * create method
+   * @param body
+   */
+  public create(model: string, type: string, body: any): Promise<any> {
+    return this.promisify(window.fetch(this.apiUrl, {
+      headers: {
+        authorization: `Bearer ${this.apiKey}`,
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        type,
+        model,
+        values: body,
+      }),
+    }));
+  }
 
-  // /**
-  //  * create method
-  //  * @param body
-  //  */
-  // public delete(model: string, type: string, query: any): Promise<any> {
-  //   return this.promisify(
-  //     window.fetch(this.apiUrl, {
-  //       headers: {
-  //         authorization: `Bearer ${this.apiKey}`,
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         model,
-  //         query,
-  //       }),
-  //     }));
-  // }
+  /**
+   * update method
+   * @param body
+   */
+  public update(model: string, type: string, where: any): Promise<any> {
+    return this.promisify(
+      window.fetch(this.apiUrl, {
+        headers: {
+          authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          type,
+          model,
+          where,
+        }),
+      }));
+  }
 
-  // /**
-  //  * create method
-  //  * @param body
-  //  */
-  // public findAll(model: string, type: string, query: any): Promise<any> {
-  //   return this.promisify(
-  //     window.fetch(this.apiUrl, {
-  //       headers: {
-  //         authorization: `Bearer ${this.apiKey}`,
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         model,
-  //         query,
-  //       }),
-  //     }));
-  // }
+  /**
+   * delete method
+   * @param body
+   */
+  public delete(model: string, type: string, where: any): Promise<any> {
+    return this.promisify(
+      window.fetch(this.apiUrl, {
+        headers: {
+          authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          type,
+          model,
+          where,
+        }),
+      }));
+  }
 
-  // /**
-  //  * create method
-  //  * @param body
-  //  */
-  // public findOne(model: string, type: string, query: any): Promise<any> {
-  //   return this.promisify(
-  //     window.fetch(this.apiUrl, {
-  //       headers: {
-  //         authorization: `Bearer ${this.apiKey}`,
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         model,
-  //         query,
-  //       }),
-  //     }));
-  // }
+  /**
+   * findAll method
+   * @param body
+   */
+  public findAll(model: string, type: string, where: any, projection: any[]): Promise<any> {
+    return this.promisify(
+      window.fetch(this.apiUrl, {
+        headers: {
+          authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          type,
+          model,
+          where,
+          projection,
+        }),
+      }));
+  }
+
+  /**
+   * create method
+   * @param body
+   */
+  public findOne(model: string, type: string, where: any, projection: any[]): Promise<any> {
+    return this.promisify(
+      window.fetch(this.apiUrl, {
+        headers: {
+          authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          type,
+          model,
+          where,
+          projection,
+        }),
+      }));
+  }
 
 }
