@@ -1,6 +1,6 @@
 {
   "name": "yap-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "YAP SDK for JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,6 @@
   "repository": "git@github.com:youngapp/yap-sdk.git",
   "author": "Gérard TOKO <gerard@youngapp.co>",
   "license": "MIT",
-  "private": true,
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
