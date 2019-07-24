@@ -16,11 +16,11 @@ The official YAP SDK for JavaScript, available for browsers and or Node.js backe
 
 ## Usage and Getting Started
 
-## Usage with TypeScript
+### Usage with TypeScript
 The YAP SDK for JavaScript bundles TypeScript definition files for use in TypeScript projects and to support tools that can read `.d.ts` files.
 Our goal is to keep these TypeScript definition files updated with each release for any public api.
 
-### Pre-requisites
+#### Pre-requisites
 Before you can begin using these TypeScript definitions with your project, you need to make sure your project meets a few of these requirements:
 
  * Use TypeScript v2.x
@@ -33,7 +33,7 @@ Before you can begin using these TypeScript definitions with your project, you n
  * If you are targeting at es5 or older ECMA standards, your `tsconfig.json` has to include `'es5'` and `'es2015.promise'` under `compilerOptions.lib`.
  See [tsconfig.json](https://github.com/youngapp/yap-sdk-js/blob/master/ts/tsconfig.json) for an example.
 
-### In the Browser
+#### In the Browser
 To use the TypeScript definition files with the global `YAP` object in a front-end project, add the following line to the top of your JavaScript file:
 
 ```javascript
