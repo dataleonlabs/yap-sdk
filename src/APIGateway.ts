@@ -1,138 +1,39 @@
 import 'whatwg-fetch';
-/**
- * APIGateway
- */
-export default class APIGateway {
-  /**
-   * API Key from client
-   */
-  private apiKey: string;
-  /**
-   * API URL from client
-   */
-  private apiUrl: string;
+import APIGatewayRoutes from './APIGatewayRoutes';
 
-  constructor({ apiKey, apiUrl }: any) {
-    if (!apiKey || !apiUrl) {
-      throw new Error('You must specify API Key and API URL');
-    }
-    this.apiKey = apiKey;
-    this.apiUrl = apiUrl;
-  }
+const supportedMethods = ['create', 'update', 'delete', 'findOne', 'findAll', 'count'];
 
-  /**
-   * Convert method to promise
-   * @param promise function
-   */
-  private promisify(func: Promise<any>): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      func.then(async (response) => {
-        if (response.status >= 400) {
-          return reject(await response.json());
+const API = new Proxy(APIGatewayRoutes, {
+  construct: (target, [message]) => {
+    const gateway = new APIGatewayRoutes(message);
+    return new Proxy(gateway, {
+      get: (target: any, name: string) => {
+        const method = supportedMethods.find((method: string) => name.includes(method));
+        if (!method) {
+          throw new Error(`Method not supported. Supported methods : ${supportedMethods.join(' | ')}`);
         }
-        return response.json();
-      }).then((result) => {
-        if (result.errors) {
-          reject(result.errors);
+        const model = name.replace(method, '');
+        if (!model) {
+          throw new Error(`You must have a model to perform any action`);
         }
-        resolve(result.data);
-      })
-        .catch((err) => {
-          return reject(err);
-        });
-    });
-  }
-
-  /**
-   * create method
-   * @param body
-   */
-  public create(model: string, type: string, body: any): Promise<any> {
-    return this.promisify(window.fetch(this.apiUrl, {
-      headers: {
-        authorization: `Bearer ${this.apiKey}`,
+        return (args: any) => {
+          switch (method) {
+            case 'create':
+              const params = {
+                values: args,
+                type: method,
+                model,
+              };
+              return target[method](params);
+            default:
+              args.type = method;
+              args.model = model;
+              return target[method](args);
+          }
+        };
       },
-      method: 'POST',
-      body: JSON.stringify({
-        type,
-        model,
-        values: body,
-      }),
-    }));
-  }
+    });
+  },
+});
 
-  /**
-   * update method
-   * @param body
-   */
-  public update(model: string, type: string, where: any): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          authorization: `Bearer ${this.apiKey}`,
-        },
-        body: JSON.stringify({
-          type,
-          model,
-          where,
-        }),
-      }));
-  }
-
-  /**
-   * delete method
-   * @param body
-   */
-  public delete(model: string, type: string, where: any): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          authorization: `Bearer ${this.apiKey}`,
-        },
-        body: JSON.stringify({
-          type,
-          model,
-          where,
-        }),
-      }));
-  }
-
-  /**
-   * findAll method
-   * @param body
-   */
-  public findAll(model: string, type: string, where: any, projection: any[]): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          authorization: `Bearer ${this.apiKey}`,
-        },
-        body: JSON.stringify({
-          type,
-          model,
-          where,
-          projection,
-        }),
-      }));
-  }
-
-  /**
-   * create method
-   * @param body
-   */
-  public findOne(model: string, type: string, where: any, projection: any[]): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          authorization: `Bearer ${this.apiKey}`,
-        },
-        body: JSON.stringify({
-          type,
-          model,
-          where,
-          projection,
-        }),
-      }));
-  }
-
-}
+export default API;

@@ -2,7 +2,7 @@
   "name": "yap-sdk",
   "version": "1.0.0",
   "description": "YAP SDK for JavaScript",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:youngapp/yap-sdk.git",
   "author": "Gérard TOKO <gerard@youngapp.co>",
   "license": "MIT",
