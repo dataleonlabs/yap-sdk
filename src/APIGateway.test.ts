@@ -193,4 +193,21 @@ describe('API Gateway', () => {
         });
         expect(user).toBe(1);
     });
+
+    test('U-TEST-12 - Test findAll function without where or parameters', async () => {
+        gb.fetch = jest.fn().mockImplementation(() => {
+            return new Promise((resolve, _) => {
+                resolve({
+                    status: 200,
+                    json() {
+                        return { data: [{ id: 1, name: 'John Brown' }, { id: 1, name: 'John Alwin' }] };
+                    },
+                });
+            });
+        });
+        const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
+        const users = await aPIGateway.findAllUser();
+        expect(users).toBeInstanceOf(Array);
+        expect(users[0].name).toContain('John');
+    });
 });
