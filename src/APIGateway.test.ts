@@ -194,7 +194,7 @@ describe('API Gateway', () => {
         expect(user).toBe(1);
     });
 
-    test('U-TEST-12 - Test findAll function without where or parameters', async () => {
+    test('U-TEST-13 - Test findAll function without where or parameters', async () => {
         gb.fetch = jest.fn().mockImplementation(() => {
             return new Promise((resolve, _) => {
                 resolve({
