@@ -90,6 +90,7 @@ export default class APIGatewayRoutes {
           'Authorization': `Bearer ${this.apiKey}`,
           'YAP-Domain': window.location.host,
         },
+        method: 'POST',
         body: JSON.stringify({
           type,
           values,
@@ -114,6 +115,7 @@ export default class APIGatewayRoutes {
           'Authorization': `Bearer ${this.apiKey}`,
           'YAP-Domain': window.location.host,
         },
+        method: 'POST',
         body: JSON.stringify({
           type,
           model,
@@ -137,6 +139,7 @@ export default class APIGatewayRoutes {
           'Authorization': `Bearer ${this.apiKey}`,
           'YAP-Domain': window.location.host,
         },
+        method: 'POST',
         body: JSON.stringify({
           type,
           model,
@@ -161,6 +164,7 @@ export default class APIGatewayRoutes {
           'Authorization': `Bearer ${this.apiKey}`,
           'YAP-Domain': window.location.host,
         },
+        method: 'POST',
         body: JSON.stringify({
           type,
           model,
@@ -184,6 +188,7 @@ export default class APIGatewayRoutes {
           'Authorization': `Bearer ${this.apiKey}`,
           'YAP-Domain': window.location.host,
         },
+        method: 'POST',
         body: JSON.stringify({
           type,
           model,
