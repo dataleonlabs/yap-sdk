@@ -61,8 +61,7 @@ export default class APIGatewayRoutes {
   public create({ model, type, values, projection }: any): Promise<any> {
     return this.promisify(window.fetch(this.apiUrl, {
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'YAP-Domain': window.location.host,
+        Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
       },
       method: 'POST',
       body: JSON.stringify({
@@ -87,8 +86,7 @@ export default class APIGatewayRoutes {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
         },
         method: 'POST',
         body: JSON.stringify({
@@ -112,8 +110,7 @@ export default class APIGatewayRoutes {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
         },
         method: 'POST',
         body: JSON.stringify({
@@ -136,8 +133,7 @@ export default class APIGatewayRoutes {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
         },
         method: 'POST',
         body: JSON.stringify({
@@ -161,8 +157,7 @@ export default class APIGatewayRoutes {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
         },
         method: 'POST',
         body: JSON.stringify({
@@ -185,8 +180,7 @@ export default class APIGatewayRoutes {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
         },
         method: 'POST',
         body: JSON.stringify({
