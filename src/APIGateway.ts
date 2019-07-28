@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import APIGatewayRoutes from './APIGatewayRoutes';
+import APIGatewayRoutes from './APIGatewayFetch';
 
 const supportedMethods = ['create', 'update', 'delete', 'findOne', 'findAll', 'count'];
 
@@ -16,7 +16,7 @@ const API = new Proxy(APIGatewayRoutes, {
         if (!model) {
           throw new Error(`You must have a model to perform any action`);
         }
-        return (args: any) => {
+        return (args: any = {}) => {
           switch (method) {
             case 'create':
               const params = {
