@@ -164,7 +164,7 @@ describe('API Gateway', () => {
         }
     });
 
-    test('U-TEST-11 - Test when corrent model method is not present', async () => {
+    test('U-TEST-11 - Test when corrent model method is not present @deprecated', async () => {
         try {
             const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
             await aPIGateway.searchUser({

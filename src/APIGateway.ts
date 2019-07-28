@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import APIGatewayRoutes from './APIGatewayRoutes';
+import APIGatewayRoutes from './APIGatewayFetch';
 
 const supportedMethods = ['create', 'update', 'delete', 'findOne', 'findAll', 'count'];
 
