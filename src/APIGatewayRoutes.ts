@@ -65,10 +65,12 @@ export default class APIGatewayRoutes {
       },
       method: 'POST',
       body: JSON.stringify({
-        type,
-        model,
-        projection,
-        values,
+        query: {
+          type,
+          model,
+          projection,
+          values,
+        },
       }),
     }));
   }
@@ -90,11 +92,13 @@ export default class APIGatewayRoutes {
         },
         method: 'POST',
         body: JSON.stringify({
-          type,
-          values,
-          projection,
-          model,
-          where,
+          query: {
+            type,
+            values,
+            projection,
+            model,
+            where,
+          },
         }),
       }));
   }
@@ -114,9 +118,11 @@ export default class APIGatewayRoutes {
         },
         method: 'POST',
         body: JSON.stringify({
-          type,
-          model,
-          where,
+          query: {
+            type,
+            model,
+            where,
+          },
         }),
       }));
   }
@@ -129,7 +135,7 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public findAll({ model, type, projection, where }: any): Promise<any[]> {
+  public findAll({ model, type, projection, where, include }: any): Promise<any[]> {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
@@ -137,10 +143,13 @@ export default class APIGatewayRoutes {
         },
         method: 'POST',
         body: JSON.stringify({
-          type,
-          model,
-          where,
-          projection,
+          query: {
+            type,
+            model,
+            include,
+            where,
+            projection,
+          },
         }),
       }));
   }
@@ -153,7 +162,7 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public findOne({ model, type, projection, where }: any): Promise<any> {
+  public findOne({ model, type, projection, where, include }: any): Promise<any> {
     return this.promisify(
       window.fetch(this.apiUrl, {
         headers: {
@@ -161,10 +170,13 @@ export default class APIGatewayRoutes {
         },
         method: 'POST',
         body: JSON.stringify({
-          type,
-          model,
-          where,
-          projection,
+          query: {
+            type,
+            model,
+            where,
+            include,
+            projection,
+          },
         }),
       }));
   }
@@ -184,9 +196,11 @@ export default class APIGatewayRoutes {
         },
         method: 'POST',
         body: JSON.stringify({
-          type,
-          model,
-          where,
+          query: {
+            type,
+            model,
+            where,
+          },
         }),
       }));
   }
