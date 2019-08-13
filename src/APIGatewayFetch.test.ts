@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import API from './APIGateway';
+import API from './APIGatewayFetch';
 
 const gb = global as any;
 
@@ -32,7 +32,10 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const user = await aPIGateway.createUser({ name: 'Title' });
+        const user = await aPIGateway.create({
+            values: { name: 'Title' },
+            model: 'User',
+        });
         expect(user.name).toBe('Title');
     });
 
@@ -49,7 +52,10 @@ describe('API Gateway', () => {
         });
         try {
             const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-            await aPIGateway.createUser({ name: 'Title' });
+            await aPIGateway.create({
+                values: { name: 'Title' },
+                model: 'User',
+            });
         } catch (error) {
             expect(error).toBeInstanceOf(Object);
             expect(error.errors).toBeInstanceOf(Array);
@@ -70,7 +76,10 @@ describe('API Gateway', () => {
         });
         try {
             const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-            await aPIGateway.createUser({ name: 'Title' });
+            await aPIGateway.create({
+                values: { name: 'Title' },
+                model: 'User',
+            });
         } catch (error) {
             expect(error).toBeInstanceOf(Array);
             expect(error[0]).toEqual('Something went wrong!');
@@ -89,7 +98,7 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const user = await aPIGateway.updateUser({ where: { id: 1 }, values: { name: 'Title updated' }, projection: ['id', 'name'] });
+        const user = await aPIGateway.update({ model: 'User', where: { id: 1 }, values: { name: 'Title updated' }, projection: ['id', 'name'] });
         expect(user).toBeInstanceOf(Object);
         expect(user.name).toBe('Title updated');
     });
@@ -106,7 +115,7 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const user = await aPIGateway.deleteUser({ where: { id: 1 } });
+        const user = await aPIGateway.delete({ model: 'User', where: { id: 1 } });
         expect(user).toBeInstanceOf(Object);
         expect(user.id).toBe(1);
     });
@@ -123,7 +132,8 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const user = await aPIGateway.findOneUser({
+        const user = await aPIGateway.findOne({
+            model: 'User',
             where: { id: 1 },
             projection: ['id', 'name'],
         });
@@ -144,7 +154,8 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const users = await aPIGateway.findAllUser({
+        const users = await aPIGateway.findAll({
+            model: 'User',
             where: { name: 'John' },
             projection: ['id', 'name'],
         });
@@ -164,15 +175,16 @@ describe('API Gateway', () => {
         }
     });
 
-    test('U-TEST-11 - Test when corrent model method is not present', async () => {
+    test('U-TEST-11 - Test when corrent model method is not present @deprecated', async () => {
         try {
             const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-            await aPIGateway.searchUser({
+            await aPIGateway.search({
+                model: 'User',
                 where: { name: 'John' },
                 projection: ['id', 'name'],
             });
         } catch (error) {
-            expect(error.message).toEqual('Method not supported. Supported methods : create | update | delete | findOne | findAll | count');
+            expect(error.message).toEqual('aPIGateway.search is not a function');
         }
     });
 
@@ -188,9 +200,29 @@ describe('API Gateway', () => {
             });
         });
         const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
-        const user = await aPIGateway.countUser({
+        const user = await aPIGateway.count({
+            model: 'User',
             where: { id: 1 },
         });
         expect(user).toBe(1);
+    });
+
+    test('U-TEST-13 - Test findAll function without where or parameters', async () => {
+        gb.fetch = jest.fn().mockImplementation(() => {
+            return new Promise((resolve, _) => {
+                resolve({
+                    status: 200,
+                    json() {
+                        return { data: [{ id: 1, name: 'John Brown' }, { id: 1, name: 'John Alwin' }] };
+                    },
+                });
+            });
+        });
+        const aPIGateway: any = new API({ apiKey: 'xxx', apiUrl: 'http://www.example.com' });
+        const users = await aPIGateway.findAll({
+            model: 'User',
+        });
+        expect(users).toBeInstanceOf(Array);
+        expect(users[0].name).toContain('John');
     });
 });

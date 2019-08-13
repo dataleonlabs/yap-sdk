@@ -1,9 +1,9 @@
 import 'whatwg-fetch';
 
 /**
- * APIGatewayRoutes
+ * APIGatewayFetch
  */
-export default class APIGatewayRoutes {
+export default class APIGatewayFetch {
   /**
    * API Key from client
    */
@@ -27,21 +27,28 @@ export default class APIGatewayRoutes {
   }
 
   /**
-   * Convert method to promise
+   * Featch query method
    * @param promise function
    */
-  private promisify(func: Promise<any>): Promise<any> {
+  public fetch({ body, method = 'POST', headers = {} }: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      func.then(async (response) => {
+      window.fetch(this.apiUrl, {
+        headers: {
+          Authorization: `Bearer ${this.apiKey} domain=${window.location.host}`,
+          ...headers,
+        },
+        method,
+        body,
+      }).then(async (response) => {
         if (response.status >= 400) {
           return reject(await response.json());
         }
         return response.json();
       }).then((result) => {
         if (result.errors) {
-          reject(result.errors);
+          return reject(result.errors);
         }
-        resolve(result.data);
+        return resolve(result.data);
       })
         .catch((err) => {
           return reject(err);
@@ -58,20 +65,19 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public create({ model, type, values, projection }: any): Promise<any> {
-    return this.promisify(window.fetch(this.apiUrl, {
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'YAP-Domain': window.location.host,
-      },
+  public create({ model, values, projection }: any): Promise<any> {
+    return this.fetch({
       method: 'POST',
+      headers: {},
       body: JSON.stringify({
-        type,
-        model,
-        projection,
-        values,
+        query: {
+          type :'create',
+          model,
+          projection,
+          values,
+        },
       }),
-    }));
+    });
   }
 
   /**
@@ -83,21 +89,18 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public update({ model, type, values, projection, where }: any): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
-        },
-        body: JSON.stringify({
-          type,
+  public update({ model, values, projection, where }: any): Promise<any> {
+    return this.fetch({
+      body: JSON.stringify({
+        query: {
+          type: 'update',
           values,
           projection,
           model,
           where,
-        }),
-      }));
+        },
+      }),
+    });
   }
 
   /**
@@ -107,19 +110,16 @@ export default class APIGatewayRoutes {
    * @param  {Object}   where Value for matching the row(s) to be selected
    * @return {Promise}
    */
-  public delete({ model, type, where }: any): Promise<boolean> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
-        },
-        body: JSON.stringify({
-          type,
+  public delete({ model, where }: any): Promise<boolean> {
+    return this.fetch({
+      body: JSON.stringify({
+        query: {
+          type: 'delete',
           model,
           where,
-        }),
-      }));
+        },
+      }),
+    });
   }
 
   /**
@@ -130,20 +130,18 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public findAll({ model, type, projection, where }: any): Promise<any[]> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
-        },
-        body: JSON.stringify({
-          type,
+  public findAll({ model, projection, where, include }: any): Promise<any[]> {
+    return this.fetch({
+      body: JSON.stringify({
+        query: {
+          type: 'findAll',
           model,
+          include,
           where,
           projection,
-        }),
-      }));
+        },
+      }),
+    });
   }
 
   /**
@@ -154,20 +152,18 @@ export default class APIGatewayRoutes {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public findOne({ model, type, projection, where }: any): Promise<any> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
-        },
-        body: JSON.stringify({
-          type,
+  public findOne({ model, projection, where, include }: any): Promise<any> {
+    return this.fetch({
+      body: JSON.stringify({
+        query: {
+          type: 'findOne',
           model,
+          include,
           where,
           projection,
-        }),
-      }));
+        },
+      }),
+    });
   }
 
   /**
@@ -177,19 +173,15 @@ export default class APIGatewayRoutes {
    * @param  {Object}   where Value for matching the row(s) to be selected
    * @return {Promise}
    */
-  public count({ model, type, where }: any): Promise<boolean> {
-    return this.promisify(
-      window.fetch(this.apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'YAP-Domain': window.location.host,
-        },
-        body: JSON.stringify({
-          type,
+  public count({ model, where }: any): Promise<boolean> {
+    return this.fetch({
+      body: JSON.stringify({
+        query: {
+          type: 'count',
           model,
           where,
-        }),
-      }));
+        },
+      }),
+    });
   }
-
 }
