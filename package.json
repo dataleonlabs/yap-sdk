@@ -33,6 +33,8 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "es6-promise": "^4.2.8",
+    "isomorphic-fetch": "^2.2.1",
     "whatwg-fetch": "^3.0.0"
   }
 }
