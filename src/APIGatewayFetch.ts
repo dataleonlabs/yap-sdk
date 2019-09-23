@@ -131,16 +131,17 @@ export default class APIGatewayFetch {
    * @param  {string[]} projection Columns to be returned for findOne and findAll (optional)
    * @return {Promise}
    */
-  public findAll({ model, projection, where, offset, limit, include, pagination }: any): Promise<any[]> {
+  public findAll({ model, projection, where, include, offset, limit, orderBy, orderWay }: any): Promise<any[]> {
     return this.fetch({
       body: JSON.stringify({
         query: {
           type: 'findAll',
           model,
           include,
-          pagination,
-          limit,
           offset,
+          limit,
+          orderBy,
+          orderWay,
           where,
           projection,
         },
